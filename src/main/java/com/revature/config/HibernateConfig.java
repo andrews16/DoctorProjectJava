@@ -1,11 +1,11 @@
 package com.revature.config;
 
+
 import javax.sql.DataSource;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -27,7 +27,7 @@ import com.revature.models.VisitInfo;
 public class HibernateConfig {
 
 	@Bean
-	public LocalSessionFactoryBean getSessionFactory() {
+	public LocalSessionFactoryBean getSessionFactory(@Autowired DataSource dataSource) {
 		System.out.println("Configuring session factory");
 		LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
 		//factoryBean.setConfigLocation(new ClassPathResource("hibernate.cfg.xml"));
@@ -36,26 +36,26 @@ public class HibernateConfig {
 		factoryBean.setAnnotatedClasses(User.class, Doctor.class, Patient.class,
 				Prescription.class, PrescriptionArchive.class, VisitInfo.class, 
 				Bill.class, Fee.class, Insurance.class);
-		factoryBean.setDataSource(getDataSource());
+		factoryBean.setDataSource(dataSource);
 		return factoryBean;
 	}
 	
-	@Bean(name="dataSource")
-	public DataSource getDataSource() {
-		System.out.println("Configuring data source");
-		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://classdb.csvriryt3t5w.us-east-2.rds.amazonaws.com:5432/project2");
-		dataSource.setUsername("project2");
-		dataSource.setPassword("jdbcp455w0rd");
-		return dataSource;
-	}
+//	@Bean(name="dataSource")
+//	public DataSource getDataSource() {
+//		System.out.println("Configuring data source");
+//		BasicDataSource dataSource = new BasicDataSource();
+//		dataSource.setDriverClassName("org.postgresql.Driver");
+//		dataSource.setUrl("jdbc:postgresql://classdb.csvriryt3t5w.us-east-2.rds.amazonaws.com:5432/project2");
+//		dataSource.setUsername("project2");
+//		dataSource.setPassword("jdbcp455w0rd");
+//		return dataSource;
+//	}
 	
 	@Bean
-	public HibernateTransactionManager getTransactionManager() {
+	public HibernateTransactionManager getTransactionManager(@Autowired LocalSessionFactoryBean sessionFactory) {
 		System.out.println("Configuring Transaction Manager... (This typically takes 30-60 seconds)");
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(getSessionFactory().getObject());
+		transactionManager.setSessionFactory(sessionFactory.getObject());
 		return transactionManager;
 	}
 	
