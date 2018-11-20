@@ -1,0 +1,20 @@
+server:
+  port: 8888
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [beans, health, conditions, env, configprops, sessions, metrics, logfile, heapdump, loggers, shutdown]
+  endpoint:
+    shutdown:
+      enabled: true
+
+spring:
+  datasource:
+    username: project2
+    password: jdbcp455w0rd
+    url: jdbc:postgresql://classdb.csvriryt3t5w.us-east-2.rds.amazonaws.com:5432/project2
+  jpa:
+    hibernate:
+      ddl-auto: validate
