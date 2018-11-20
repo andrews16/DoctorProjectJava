@@ -26,14 +26,14 @@ public class RxService {
 	 * Method gets the list of prescriptions from the Repo after authentication.
 	 * The session will be checked for either the matching patient IDs
 	 * OR for matching Doctor IDs.
-	 * @param patient
+	 * @param patientId
 	 * @return
 	 * @throws BadRequestException 
 	 */
-	public List<Prescription> getList(Patient patient) throws BadRequestException {
+	public List<Prescription> getList(int patientId) throws BadRequestException {
 		// @Session (?) this will require a session with validation
 		// CHECK: user_id = patient.id OR user_id = patient.getDoctor.getId()
-		List<Prescription> list = rxRepo.getListById(patient.getId());
+		List<Prescription> list = rxRepo.getListById(patientId);
 		if(list == null) {
 			throw new BadRequestException();
 		}
@@ -49,8 +49,8 @@ public class RxService {
 		
 	}
 
-	public List<PrescriptionArchive> getArchive(Patient patient) {
-		return rxRepo.getArchive(patient.getId());
+	public List<PrescriptionArchive> getArchive(int patientId) {
+		return rxRepo.getArchive(patientId);
 	}
 
 }

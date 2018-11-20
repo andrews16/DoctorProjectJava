@@ -1,11 +1,6 @@
 package com.revature.controllers;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,15 +8,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.BadRequestException;
-import com.revature.models.Patient;
 import com.revature.models.Prescription;
 import com.revature.models.PrescriptionArchive;
 import com.revature.services.RxService;
@@ -44,11 +38,11 @@ public class RxController {
 	 * POST in rx/list requires in input of a PATIENT
 	 * @throws BadRequestException 
 	 */
-	@PostMapping("list")
-	public List<Prescription> getListFor(@RequestBody Patient patient) throws BadRequestException {
+	@GetMapping("{patientId}")
+	public List<Prescription> getListFor(@RequestParam int patientId) throws BadRequestException {
 		//Testing post body:
 		// {"id":3,"doctor":{"id":1}}
-		return this.rxService.getList(patient);
+		return this.rxService.getList(patientId);
 	}
 	
 	/**
@@ -87,11 +81,11 @@ public class RxController {
 	 * @param patient
 	 * @return
 	 */
-	@PostMapping("archive")
-	public List<PrescriptionArchive> getArchiveFor(@RequestBody Patient patient) {
+	@PostMapping("archive/{patientId}")
+	public List<PrescriptionArchive> getArchiveFor(@RequestParam int patientId) {
 		//Testing post body:
 		// {"id":3,"doctor":{"id":1}}
-		return this.rxService.getArchive(patient);
+		return this.rxService.getArchive(patientId);
 	}
 	@PostMapping("remove")
 	public void removeRx(@RequestBody Prescription rx) {
