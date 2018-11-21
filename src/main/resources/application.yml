@@ -13,9 +13,9 @@ management:
 spring:
   datasource:
     platform: postgres
-    username: project2
-    password: jdbcp455w0rd
-    url: jdbc:postgresql://classdb.csvriryt3t5w.us-east-2.rds.amazonaws.com:5432/project2
+    username: ${P2_DB_ROLE}
+    password: ${P2_DB_PASS}
+    url: ${P2_DB_URL}
     driverClassName: org.postgresql.Driver
   jpa:
     database: POSTGRESQL
