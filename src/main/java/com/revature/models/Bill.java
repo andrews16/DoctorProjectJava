@@ -28,7 +28,7 @@ public class Bill {
 	private int billId;
 	
 	@Column(name="date")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date date; 
 	
 	@ManyToOne(fetch = FetchType.LAZY)

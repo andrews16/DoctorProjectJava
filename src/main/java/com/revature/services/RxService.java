@@ -34,7 +34,7 @@ public class RxService {
 		// @Session (?) this will require a session with validation
 		// CHECK: user_id = patient.id OR user_id = patient.getDoctor.getId()
 		List<Prescription> list = rxRepo.getListById(patientId);
-		if(list == null) {
+		if(list == null || list.size() == 0) {
 			throw new BadRequestException();
 		}
 		return list;

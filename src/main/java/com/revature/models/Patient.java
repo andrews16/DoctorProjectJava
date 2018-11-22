@@ -29,7 +29,7 @@ public class Patient extends User{
 //	private static UserRole role = UserRole.PATIENT; 
 	
 	@Column(name="patient_birthday", nullable = false)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date birthday;
 	
 	@Column(name="patient_gender")
