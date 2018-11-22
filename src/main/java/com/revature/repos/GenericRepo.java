@@ -1,12 +1,12 @@
-package com.revature.util;
+package com.revature.repos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Repository
-public class HibernateUtil {
+public class GenericRepo {
     
 	SessionFactory sf;
     
     
     @Autowired
-    public HibernateUtil(SessionFactory sf) {
+    public GenericRepo(SessionFactory sf) {
 		super();
 		this.sf = sf;
 	}
@@ -65,23 +65,25 @@ public class HibernateUtil {
 	 * @return
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
-	public <T> List<T> criteriaGetObjectsByField(Class<T> theClass, String search, String variableName) {
+	public <T> List<T> criteriaGetObjectsByField(Class<T> class1, Object search, String variableName) {
 		//1. Gets the Criteria Builder singleton instance - a utility class for creating critera
 		//2. Creating an instance of the CirteriaQuery object for type input
 		//3. Setting the root of the query - because we may be getting out info by joining data
 		//	 it's necessary to specify which table the query actually begins on
 		//4. the query logic itself
+		
+		System.out.println("Generic Repo method run");
 		CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		//1
-		CriteriaQuery<T> initQuery = cb.createQuery(theClass);	//2
-		Root<T> root = initQuery.from(theClass);				//3
+		CriteriaQuery<T> initQuery = cb.createQuery(class1);	//2
+		Root<T> root = initQuery.from(class1);				//3
 		initQuery												//4
-			.select(root)	
+			//.select(root)	
 			.where(cb.equal(root.get(variableName), search)); 
 					// filter applied equal operand (==) on the
 					// root.name column with the value of 'color'
 					// CHECK FOR OBJECT variable, not column!
 		Query<T> query = sf.getCurrentSession().createQuery(initQuery);
-		System.out.println("HibUtil TEST" + query.toString());
+		System.out.println("HibUtil TEST" + query);
 		List<T> results = query.getResultList();
 		return results;
 	}

@@ -32,7 +32,7 @@ public class VisitInfo {
 	private Doctor doctor;
 
 	@Column(name = "visit_date", nullable = false)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date date;
 	
 	@Column(name = "blood_pressure", length = 8)

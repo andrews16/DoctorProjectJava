@@ -7,13 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.annotations.RequireDoctorOrPatient;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.BadRequestException;
 import com.revature.models.Prescription;
@@ -38,8 +39,11 @@ public class RxController {
 	 * POST in rx/list requires in input of a PATIENT
 	 * @throws BadRequestException 
 	 */
+	@RequireDoctorOrPatient
 	@GetMapping("{patientId}")
-	public List<Prescription> getListFor(@RequestParam int patientId) throws BadRequestException {
+	public List<Prescription> getListFor(@PathVariable int patientId) throws BadRequestException {
+		// The principal is set as the username, so this cast will work fine.
+
 		//Testing post body:
 		// {"id":3,"doctor":{"id":1}}
 		return this.rxService.getList(patientId);
@@ -49,6 +53,14 @@ public class RxController {
 	 * Returns prescription with new DB id.
 	 * @param rx
 	 * @return
+	 * 	Testing : {
+	*		"id": 0,
+	*	  "dose": "50mg",
+	*	  "frequency": "MORNING 45 MIN BEFORE BREAKFAST",
+	*	  "name": "Benadryl",
+	*	  "patientId": 25,
+	*	  "dateStarted": "2018-09-22"
+	*	}
 	 */
 	@PostMapping("add")
 	public Prescription addRx(@RequestBody Prescription rx ) {
@@ -62,17 +74,10 @@ public class RxController {
 		
 		OR 
 		
-		{
-	"id": 0,
-  "dose": "50mg",
-  "frequency": "MORNING 45 MIN BEFORE BREAKFAST",
-  "name": "Benadryl",
-  "patientId": 25,
-  "dateStarted": "2018-09-22"
-}
+	
 		
 		*/
-		System.out.println("rx controller " + rx);
+
 		return  this.rxService.addRx(rx);
 	}
 	
@@ -82,14 +87,13 @@ public class RxController {
 	 * @return
 	 */
 	@PostMapping("archive/{patientId}")
-	public List<PrescriptionArchive> getArchiveFor(@RequestParam int patientId) {
+	public List<PrescriptionArchive> getArchiveFor(@PathVariable int patientId) {
 		//Testing post body:
 		// {"id":3,"doctor":{"id":1}}
 		return this.rxService.getArchive(patientId);
 	}
 	@PostMapping("remove")
 	public void removeRx(@RequestBody Prescription rx) {
-		System.out.println("rx contoller remove : " + rx);
 		this.rxService.removeRx(rx);
 	}
 	
@@ -98,10 +102,6 @@ public class RxController {
 	public void handleBadRequestException(BadRequestException ex) {
 	}
 
-	 @ExceptionHandler(AuthenticationException.class)
-	 @ResponseStatus(value=HttpStatus.UNAUTHORIZED, reason="Not authorized to view")
-	 public void handleAuthenticationException(BadRequestException ex) {
-	 }
 
 }
 
