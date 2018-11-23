@@ -72,7 +72,7 @@ public class RxController {
 	 * @param patient
 	 * @return
 	 */
-	@PostMapping("archive/{patientId}")
+	@GetMapping("archive/{patientId}")
 	public List<PrescriptionArchive> getArchiveFor(@PathVariable int patientId) {
 		//Testing post body:
 		// {"id":3,"doctor":{"id":1}}
