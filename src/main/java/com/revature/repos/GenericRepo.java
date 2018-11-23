@@ -65,29 +65,56 @@ public class GenericRepo {
 	 * @return
 	 */
 	@Transactional(propagation = Propagation.REQUIRED)
-	public <T> List<T> criteriaGetObjectsByField(Class<T> class1, Object search, String variableName) {
-		//1. Gets the Criteria Builder singleton instance - a utility class for creating critera
-		//2. Creating an instance of the CirteriaQuery object for type input
-		//3. Setting the root of the query - because we may be getting out info by joining data
-		//	 it's necessary to specify which table the query actually begins on
-		//4. the query logic itself
-		
-		System.out.println("Generic Repo method run");
+	public <T> List<T> criteriaGetObjectsByField(Class<T> class_, Object search, String variableName) {
+		/*
+		 * 1. Gets the Criteria Builder singleton instance - a utility class for creating critera
+		 * 2. Creating an instance of the CirteriaQuery object for type input
+		 * 3. Setting the root of the query - because we may be getting out info by joining data
+		 * 	it's necessary to specify which table the query actually begins on
+		 * 4. the query logic itself
+		 * 5. Filter applies equal operand (==) and checks object variable name, not the column!
+		 * 		You can add multiple filters separated by commas.
+		*/
 		CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		//1
-		CriteriaQuery<T> initQuery = cb.createQuery(class1);	//2
-		Root<T> root = initQuery.from(class1);				//3
+		CriteriaQuery<T> initQuery = cb.createQuery(class_);	//2
+		Root<T> root = initQuery.from(class_);				//3
 		initQuery												//4
 			//.select(root)	
-			.where(cb.equal(root.get(variableName), search)); 
-					// filter applied equal operand (==) on the
-					// root.name column with the value of 'color'
-					// CHECK FOR OBJECT variable, not column!
+			.where(cb.equal(root.get(variableName), search)); // 5 
 		Query<T> query = sf.getCurrentSession().createQuery(initQuery);
-		System.out.println("HibUtil TEST" + query);
 		List<T> results = query.getResultList();
 		return results;
 	}
-	
+
+	/**
+	 * Gets object for any hibernate mapped string attribute, and will ignore the case of the result.
+	 * @param class - Object.class for the result and search
+	 * @param search - Search term, a string
+	 * @param variableName - name of the variable within the object that is specified
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.REQUIRED)
+	public <T> List<T> criteriaGetObjectsByFieldIgnoreCase(Class<T> class_, String search, String variableName) {
+		/*
+		 * 1. Gets the Criteria Builder singleton instance - a utility class for creating critera
+		 * 2. Creating an instance of the CirteriaQuery object for type input
+		 * 3. Setting the root of the query - because we may be getting out info by joining data
+		 * 	it's necessary to specify which table the query actually begins on
+		 * 4. the query logic itself
+		 * 5. Filter applies equal operand (==) and checks object variable name, not the column!
+		 * 		You can add multiple filters separated by commas.
+		*/
+		CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		//1
+		CriteriaQuery<T> initQuery = cb.createQuery(class_);	//2
+		Root<T> root = initQuery.from(class_);				//3
+		initQuery												//4
+			//.select(root)	
+			.where(cb.equal(cb.lower(root.get(variableName)), search.toLowerCase())); // 5 
+		Query<T> query = sf.getCurrentSession().createQuery(initQuery);
+		List<T> results = query.getResultList();
+		return results;
+	}
+
 	//UPDATE method will go here
 
 	//generic DELETE method will go here

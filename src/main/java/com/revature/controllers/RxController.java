@@ -64,20 +64,6 @@ public class RxController {
 	 */
 	@PostMapping("add")
 	public Prescription addRx(@RequestBody Prescription rx ) {
-		//Testing post body:
-		/*
-		 {"dateStarted":"2018-10-15",
-		"name":"buprinorphine/naloxone",
-		"dose":"8mg/2mg",
-		"frequency":"TWICE PER DAY UNDER TOUNGE",
-		"patientId":3}
-		
-		OR 
-		
-	
-		
-		*/
-
 		return  this.rxService.addRx(rx);
 	}
 	
