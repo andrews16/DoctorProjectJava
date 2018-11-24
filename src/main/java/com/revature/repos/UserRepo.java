@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -83,32 +84,14 @@ public class UserRepo {
 	public List<Patient> getPatientByLastNameAndBirthday(Patient patient) {
     	Session session = sf.getCurrentSession();
     	
-//
-//    	List<Patient> list = session.createQuery("select p from Patient p "
-//    			+ " where p.lastName like :lastName")
-//			.setParameter("lastName", patient.getLastName(), StringType.INSTANCE)
-//			.list();
-//
-//    	List<Patient> results = new ArrayList<>();
-//    	
-//    	if (patient.getBirthday() != null) {
-//			for(Patient pat : list) {
-//				if (pat.getBirthday() == patient.getBirthday()) {
-//					results.add(pat);
-//				}
-//			}
-//    	}
-//		List<Patient> result = (List<Patient>)list;
-    	
     	CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		
 		CriteriaQuery<Patient> initQuery = cb.createQuery(Patient.class);	
 		Root<Patient> root = initQuery.from(Patient.class);				
 		initQuery
-			.select(root)	
-			.where(cb.equal(root.get("lastName"), patient.getLastName()),
+			.select(root)
+			.where(cb.equal(cb.upper(root.get("lastName")), patient.getLastName().toUpperCase()),
 					cb.equal(root.get("birthday"), patient.getBirthday())); 
 		Query<Patient> query = sf.getCurrentSession().createQuery(initQuery);
-		System.out.println("HibUtil TEST" + query.toString());
 		List<Patient> results = query.getResultList();		
     	
 		return results;
@@ -129,7 +112,6 @@ public class UserRepo {
     			.select(root)	
     			.where(cb.equal(root.get("username"), username)); 
     		Query<User> query = sf.getCurrentSession().createQuery(initQuery);
-    		System.out.println("HibUtil TEST" + query.toString());
     		List<User> results = query.getResultList();
     		if(results.size() < 1 ) {
     			return null;

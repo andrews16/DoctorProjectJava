@@ -47,7 +47,7 @@ public class UserService {
 		} else if (patient.getLastName() != null && patient.getBirthday() != null){
 			return userRepo.getPatientByLastNameAndBirthday(patient);
 		} else if (patient.getLastName() != null ) {
-			 return genericRepo.criteriaGetObjectsByField(Patient.class, lastName, "lastName");
+			 return genericRepo.criteriaGetObjectsByFieldIgnoreCase(Patient.class, lastName, "lastName");
 		} else if (patient.getBirthday() != null ) {
 			 return genericRepo.criteriaGetObjectsByField(Patient.class, patient.getBirthday(), "birthday");
 		}
