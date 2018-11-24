@@ -3,6 +3,7 @@ package com.revature.services;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class UserService {
 
 	public List<Patient> getPatient(Integer id, String lastName, String birthday) throws BadRequestException {
 		Patient patient = new Patient();
+		if((id == null || id == 0) && birthday == null && lastName == null) {
+			return new ArrayList<Patient>(Arrays.asList(patient));
+		}
+		
 		patient.setId(id == null? 0 : id);
 		patient.setLastName(lastName);
 		if(birthday != null ) {

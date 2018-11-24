@@ -1,11 +1,11 @@
 package com.revature.aspects;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -36,9 +36,14 @@ public class CustomExceptionHandler {
 		System.out.println("Exception thrown and advice reached." );
 	}
 	
-	@AfterThrowing(pointcut = "execution(* com.revature.controllers..*(..))", throwing = "ex")
-	public void logExceptions(BadRequestException ex) throws Exception {
-		System.out.println("Bad Request! Please check your input formatting and verify that it is correct. " );
+	@AfterThrowing(pointcut = "execution(* com.revature.controllers..*(..)) && args(*,request)", throwing = "ex")
+	public void logExceptions(BadRequestException ex, HttpServletRequest request) throws Exception {
+		System.out.println("Bad Request!");
+		Cookie[] cookies = request.getCookies();
+		for(Cookie cookie : cookies) {
+			System.out.println(cookie.getName() + "," + cookie.getValue());
+		}
+		System.out.println(request.getPathInfo());
 	}
 //	
 //	@AfterThrowing(pointcut = "execution(* com.revature.controller.* (..))", throwing = "ex")

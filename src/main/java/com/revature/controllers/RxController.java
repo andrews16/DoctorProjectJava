@@ -2,6 +2,8 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.annotations.RequireDoctor;
 import com.revature.annotations.RequireDoctorOrPatient;
-import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.BadRequestException;
 import com.revature.models.Prescription;
 import com.revature.models.PrescriptionArchive;
@@ -36,16 +38,12 @@ public class RxController {
 	
 	/**
 	 * Returns a list of prescriptions by patient Id.
-	 * POST in rx/list requires in input of a PATIENT
+	 * POST in rx/{id} requires in input of a PATIENT
 	 * @throws BadRequestException 
 	 */
 	@RequireDoctorOrPatient
 	@GetMapping("{patientId}")
-	public List<Prescription> getListFor(@PathVariable int patientId) throws BadRequestException {
-		// The principal is set as the username, so this cast will work fine.
-
-		//Testing post body:
-		// {"id":3,"doctor":{"id":1}}
+	public List<Prescription> getListFor(@PathVariable Integer patientId, HttpServletRequest request) throws BadRequestException {
 		return this.rxService.getList(patientId);
 	}
 	
@@ -61,9 +59,11 @@ public class RxController {
 	*	  "patientId": 25,
 	*	  "dateStarted": "2018-09-22"
 	*	}
+	 * @throws BadRequestException 
 	 */
+	@RequireDoctor
 	@PostMapping("add")
-	public Prescription addRx(@RequestBody Prescription rx ) {
+	public Prescription addRx(@RequestBody Prescription rx, HttpServletRequest request ) throws BadRequestException {
 		return  this.rxService.addRx(rx);
 	}
 	
@@ -71,20 +71,22 @@ public class RxController {
 	 * Get archive of old prescriptions by patient
 	 * @param patient
 	 * @return
+	 * @throws BadRequestException 
 	 */
+	@RequireDoctorOrPatient
 	@GetMapping("archive/{patientId}")
-	public List<PrescriptionArchive> getArchiveFor(@PathVariable int patientId) {
-		//Testing post body:
-		// {"id":3,"doctor":{"id":1}}
+	public List<PrescriptionArchive> getArchiveFor(@PathVariable int patientId, HttpServletRequest request) throws BadRequestException {
 		return this.rxService.getArchive(patientId);
 	}
-	@PostMapping("remove")
-	public void removeRx(@RequestBody Prescription rx) {
-		this.rxService.removeRx(rx);
+	
+	@RequireDoctor
+	@GetMapping("remove/{rxId}")
+	public void removeRx(@PathVariable Integer rxId, HttpServletRequest request ) throws BadRequestException {
+		this.rxService.removeRx(rxId);
 	}
 	
 	@ExceptionHandler(BadRequestException.class)
-	@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No prescriptions found")
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Bad Request")
 	public void handleBadRequestException(BadRequestException ex) {
 	}
 
