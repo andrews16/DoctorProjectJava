@@ -38,7 +38,7 @@ public class Prescription {
 	@Access(AccessType.PROPERTY)
 	@JsonIgnore
 	private Patient patient = new Patient();
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name="start_date")
 	private Date dateStarted;
 	
