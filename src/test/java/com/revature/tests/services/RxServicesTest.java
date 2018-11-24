@@ -31,7 +31,7 @@ public class RxServicesTest {
 	}
 	
 	@Test
-	public void getListsResults() throws Exception {
+	public void getListsResults() throws BadRequestException {
 		//Mockito.
 		int patientId = 20;
 		List<Prescription> fakeList = new ArrayList<>();
