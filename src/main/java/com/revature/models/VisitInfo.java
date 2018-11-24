@@ -2,6 +2,8 @@ package com.revature.models;
 
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="visit_information")
@@ -23,10 +27,14 @@ public class VisitInfo {
 	@Column(name = "visit_id")
 	private int vistId;
 	
+	@JsonIgnore
+	@Access(AccessType.PROPERTY)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id", nullable = false)
 	private Patient patient;
 	
+	@JsonIgnore
+	@Access(AccessType.PROPERTY)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "doctor_id", nullable = false)
 	private Doctor doctor;
@@ -43,6 +51,39 @@ public class VisitInfo {
 	private String doctorDescription;
 	@Column(name = "pat_notes")
 	private String patientNote;
+	
+	@Transient
+	private int patientId;
+	@Transient
+	private int doctorId;
+	
+	// Important setters
+	////////////////////
+	public void setPatientId(int patientId) {
+		this.patientId = patientId;
+	}
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+		this.patientId = patient.getId();
+	}
+	
+	public void setDoctorId(int doctorId) {
+		this.doctorId = doctorId;
+	}
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+		this.doctorId = doctor.getId();
+	}
+	////////////////////
+	
+	public int getPatientId() {
+		return patientId;
+	}
+	
+	public int getDoctorId() {
+		return doctorId;
+	}
+	
 	public VisitInfo() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -74,15 +115,15 @@ public class VisitInfo {
 	public Patient getPatient() {
 		return patient;
 	}
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
+//	public void setPatient(Patient patient) {
+//		this.patient = patient;
+//	}
 	public Doctor getDoctor() {
 		return doctor;
 	}
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
+//	public void setDoctor(Doctor doctor) {
+//		this.doctor = doctor;
+//	}
 	public Date getDate() {
 		return date;
 	}
