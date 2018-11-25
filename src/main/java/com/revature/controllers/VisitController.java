@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.annotations.RequireDoctorOrPatient;
+import com.revature.exceptions.BadRequestException;
 import com.revature.models.Patient;
 import com.revature.models.VisitInfo;
 import com.revature.services.VisitService;
@@ -62,8 +64,9 @@ public class VisitController {
 	}
 	
 	// get single visit
+	@RequireDoctorOrPatient
 	@GetMapping("{id}")
-	public VisitInfo getVisit(@PathVariable int id) {
+	public VisitInfo getVisit(@PathVariable int id) throws BadRequestException {
 		return visitService.getVisit(id);
 	}
 
