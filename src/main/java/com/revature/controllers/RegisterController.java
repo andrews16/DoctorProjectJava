@@ -12,7 +12,7 @@ import com.revature.models.User;
 import com.revature.services.RegisterService;
 
 @RestController
-@RequestMapping("request-user")
+@RequestMapping("rg")
 public class RegisterController {
 		
 	RegisterService registerService;

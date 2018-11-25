@@ -31,7 +31,7 @@ public class PrescriptionArchive {
 	@Column(name = "rx_id")
 	private int id;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name="start_date")
 	private Date dateStarted;
 	
@@ -44,7 +44,7 @@ public class PrescriptionArchive {
 	@Column(name="patient_id")
 	private int patientId;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Column(name="end_date")
 	private Date dateEnded;
 

@@ -1,27 +1,24 @@
 package com.revature.controllers;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.exceptions.AuthenticationException;
+import com.revature.annotations.RequireDoctor;
+import com.revature.annotations.RequireDoctorOrPatient;
 import com.revature.exceptions.BadRequestException;
-import com.revature.models.Patient;
 import com.revature.models.Prescription;
 import com.revature.models.PrescriptionArchive;
 import com.revature.services.RxService;
@@ -41,44 +38,32 @@ public class RxController {
 	
 	/**
 	 * Returns a list of prescriptions by patient Id.
-	 * POST in rx/list requires in input of a PATIENT
+	 * POST in rx/{id} requires in input of a PATIENT
 	 * @throws BadRequestException 
 	 */
-	@PostMapping("list")
-	public List<Prescription> getListFor(@RequestBody Patient patient) throws BadRequestException {
-		//Testing post body:
-		// {"id":3,"doctor":{"id":1}}
-		return this.rxService.getList(patient);
+	@RequireDoctorOrPatient
+	@GetMapping("{patientId}")
+	public List<Prescription> getListFor(@PathVariable Integer patientId, HttpServletRequest request) throws BadRequestException {
+		return this.rxService.getList(patientId);
 	}
 	
 	/**
 	 * Returns prescription with new DB id.
 	 * @param rx
 	 * @return
+	 * 	Testing : {
+	*		"id": 0,
+	*	  "dose": "50mg",
+	*	  "frequency": "MORNING 45 MIN BEFORE BREAKFAST",
+	*	  "name": "Benadryl",
+	*	  "patientId": 25,
+	*	  "dateStarted": "2018-09-22"
+	*	}
+	 * @throws BadRequestException 
 	 */
+	@RequireDoctor
 	@PostMapping("add")
-	public Prescription addRx(@RequestBody Prescription rx ) {
-		//Testing post body:
-		/*
-		 {"dateStarted":"2018-10-15",
-		"name":"buprinorphine/naloxone",
-		"dose":"8mg/2mg",
-		"frequency":"TWICE PER DAY UNDER TOUNGE",
-		"patientId":3}
-		
-		OR 
-		
-		{
-	"id": 0,
-  "dose": "50mg",
-  "frequency": "MORNING 45 MIN BEFORE BREAKFAST",
-  "name": "Benadryl",
-  "patientId": 25,
-  "dateStarted": "2018-09-22"
-}
-		
-		*/
-		System.out.println("rx controller " + rx);
+	public Prescription addRx(@RequestBody Prescription rx, HttpServletRequest request ) throws BadRequestException {
 		return  this.rxService.addRx(rx);
 	}
 	
@@ -86,28 +71,25 @@ public class RxController {
 	 * Get archive of old prescriptions by patient
 	 * @param patient
 	 * @return
+	 * @throws BadRequestException 
 	 */
-	@PostMapping("archive")
-	public List<PrescriptionArchive> getArchiveFor(@RequestBody Patient patient) {
-		//Testing post body:
-		// {"id":3,"doctor":{"id":1}}
-		return this.rxService.getArchive(patient);
+	@RequireDoctorOrPatient
+	@GetMapping("archive/{patientId}")
+	public List<PrescriptionArchive> getArchiveFor(@PathVariable int patientId, HttpServletRequest request) throws BadRequestException {
+		return this.rxService.getArchive(patientId);
 	}
-	@PostMapping("remove")
-	public void removeRx(@RequestBody Prescription rx) {
-		System.out.println("rx contoller remove : " + rx);
-		this.rxService.removeRx(rx);
+	
+	@RequireDoctor
+	@GetMapping("remove/{rxId}")
+	public void removeRx(@PathVariable Integer rxId, HttpServletRequest request ) throws BadRequestException {
+		this.rxService.removeRx(rxId);
 	}
 	
 	@ExceptionHandler(BadRequestException.class)
-	@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No prescriptions found")
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Bad Request")
 	public void handleBadRequestException(BadRequestException ex) {
 	}
 
-	 @ExceptionHandler(AuthenticationException.class)
-	 @ResponseStatus(value=HttpStatus.UNAUTHORIZED, reason="Not authorized to view")
-	 public void handleAuthenticationException(BadRequestException ex) {
-	 }
 
 }
 

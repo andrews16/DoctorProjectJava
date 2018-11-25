@@ -74,10 +74,10 @@ public class RxRepo {
 	 * DELETE - Remove a prescription
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void removeRx(Prescription rx) {
+	public void removeRx(int rxId) {
 		Session session = sf.getCurrentSession();
-		Prescription persistedRx = session.get(Prescription.class, rx.getId());
-		PrescriptionArchive archive = new PrescriptionArchive(rx, Date.valueOf(LocalDate.now()));
+		Prescription persistedRx = session.get(Prescription.class, rxId);
+		PrescriptionArchive archive = new PrescriptionArchive(persistedRx, Date.valueOf(LocalDate.now()));
 		
 		session.delete(persistedRx);
 		session.save(archive);
