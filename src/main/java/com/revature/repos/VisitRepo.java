@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.models.Doctor;
@@ -34,7 +35,10 @@ public class VisitRepo {
 		return null;
 	}
 
+	
+	
 	//single visit
+	@Transactional(propagation = Propagation.REQUIRED)
 	public VisitInfo getVisit(int id) {
 			Session session = sf.getCurrentSession();
 			VisitInfo vi = session.createNativeQuery("SELECT * FROM visit_info WHERE visit_id = :visid", VisitInfo.class)

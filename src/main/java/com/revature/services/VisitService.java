@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.revature.exceptions.BadRequestException;
 import com.revature.models.Patient;
 import com.revature.models.VisitInfo;
 import com.revature.repos.VisitRepo;
@@ -27,11 +27,18 @@ public class VisitService {
 		return vi;
 	}
 	
-	// single visit
-	public VisitInfo getVisit(int id) {
-		VisitInfo visit = visitRepo.getVisit(id);
-		return visit;
+	// gets single visit
+	public VisitInfo getVisit(int id) throws BadRequestException {
+	VisitInfo vi = visitRepo.getVisit(id);
+	if(vi == null) {
+		throw new BadRequestException();
 	}
+	return vi;
+	}
+//	public VisitInfo getVisit(int id) {
+//		VisitInfo visit = visitRepo.getVisit(id);
+//		return visit;
+//	}
 	
 	public List<VisitInfo> getList(Patient patient) {
 		List<VisitInfo> list = visitRepo.getList(patient.getId());
