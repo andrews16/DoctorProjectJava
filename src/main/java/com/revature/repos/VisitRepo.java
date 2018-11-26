@@ -39,13 +39,17 @@ public class VisitRepo {
 	
 	//single visit
 	@Transactional(propagation = Propagation.REQUIRED)
-	public VisitInfo getVisit(int id) {
-			Session session = sf.getCurrentSession();
-			VisitInfo vi = session.createNativeQuery("SELECT * FROM visit_info WHERE visit_id = :visid", VisitInfo.class)
-					.setParameter("visid", id)
-					.getSingleResult();
-		return vi;
+	public VisitInfo findById(VisitInfo vi) {
+		return sf.getCurrentSession().get(VisitInfo.class,  vi.getVisitId());
 	}
+	
+//	public VisitInfo getVisit(int id) {
+//			Session session = sf.getCurrentSession();
+//			VisitInfo vi = session.createNativeQuery("SELECT * FROM visit_info WHERE visit_id = :visid", VisitInfo.class)
+//					.setParameter("visid", id)
+//					.getSingleResult();
+//		return vi;
+//	}
 
 	@Transactional
 	public VisitInfo addVisitInfo(VisitInfo vi) {

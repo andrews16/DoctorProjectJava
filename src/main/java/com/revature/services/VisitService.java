@@ -28,12 +28,9 @@ public class VisitService {
 	}
 	
 	// gets single visit
-	public VisitInfo getVisit(int id) throws BadRequestException {
+	public VisitInfo findById(int id) {
 	VisitInfo vi = visitRepo.getVisit(id);
-	if(vi == null) {
-		throw new BadRequestException();
-	}
-	return vi;
+	return VisitRepo.findById(id);
 	}
 //	public VisitInfo getVisit(int id) {
 //		VisitInfo visit = visitRepo.getVisit(id);
