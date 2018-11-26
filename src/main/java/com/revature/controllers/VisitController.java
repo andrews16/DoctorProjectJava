@@ -64,7 +64,7 @@ public class VisitController {
 	}
 	
 	// get single visit
-	@RequireDoctorOrPatient
+//	@RequireDoctorOrPatient
 	@GetMapping("{id}")
 	public VisitInfo getVisit(@PathVariable int id) throws BadRequestException {
 		return visitService.getVisit(id);
