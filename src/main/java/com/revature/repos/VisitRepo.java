@@ -39,8 +39,8 @@ public class VisitRepo {
 	
 	//single visit
 	@Transactional(propagation = Propagation.REQUIRED)
-	public VisitInfo findById(VisitInfo vi) {
-		return sf.getCurrentSession().get(VisitInfo.class,  vi.getVisitId());
+	public VisitInfo findById(int id) {
+		return sf.getCurrentSession().get(VisitInfo.class, id);
 	}
 	
 //	public VisitInfo getVisit(int id) {

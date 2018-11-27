@@ -29,8 +29,8 @@ public class VisitService {
 	
 	// gets single visit
 	public VisitInfo findById(int id) {
-	VisitInfo vi = visitRepo.getVisit(id);
-	return VisitRepo.findById(id);
+//	VisitInfo vi = visitRepo.getVisit(id);
+	return findById(id);
 	}
 //	public VisitInfo getVisit(int id) {
 //		VisitInfo visit = visitRepo.getVisit(id);
