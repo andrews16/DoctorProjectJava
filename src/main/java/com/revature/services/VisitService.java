@@ -2,10 +2,11 @@ package com.revature.services;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revature.exceptions.BadRequestException;
 import com.revature.models.Patient;
 import com.revature.models.VisitInfo;
 import com.revature.repos.VisitRepo;
@@ -28,10 +29,16 @@ public class VisitService {
 	}
 	
 	// gets single visit
+	@Transactional
 	public VisitInfo findById(int id) {
 //	VisitInfo vi = visitRepo.getVisit(id);
-	return findById(id);
+		return visitRepo.findByIdRepo(id);
 	}
+	
+//	public User getUser(String username) {
+//		return userRepo.getUserByUsername(username);
+//	}
+	
 //	public VisitInfo getVisit(int id) {
 //		VisitInfo visit = visitRepo.getVisit(id);
 //		return visit;
