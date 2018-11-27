@@ -1,10 +1,7 @@
 package com.revature.aspects;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -13,37 +10,64 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.util.WebUtils;
 
 import com.revature.enums.UserRole;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.BadRequestException;
 import com.revature.models.User;
-import com.revature.repos.UserRepo;
+import com.revature.services.AuthenticationService;
 
 @Aspect
 @Component
 public class SecurityAspect {
 
-	UserRepo userRepo;
+	AuthenticationService authService;
 	
 	@Autowired
-	public SecurityAspect(UserRepo userRepo) {
+	public SecurityAspect(AuthenticationService authService) {
 		super();
-		this.userRepo = userRepo;
+		this.authService = authService;
 	}
 	
 	
 	@Pointcut("execution(@com.revature.annotations.RequireDoctorOrPatient * *(..))")
 	protected void requireDoctorOrPatientPointcut() {
 	}
-	
+	@Pointcut("execution(@com.revature.annotations.RequireDoctor * *(..))")
+	protected void requireDoctorPointcut() {
+	}
 
 
-	@Before(value = "requireDoctorOrPatientPointcut() && args(patientId,..)")
-	public void checkDocOrPat(JoinPoint joinPoint, Integer patientId) throws AuthenticationException {
+	/**
+	 * Require either the patient that is actually involved or a doctor.
+	 * @param patientId
+	 * @param request
+	 * @throws AuthenticationException
+	 */
+	@Before(value = "requireDoctorOrPatientPointcut() && args(patientId,request)")
+	public void checkDocOrPat(Integer patientId, HttpServletRequest request) throws AuthenticationException {
+		User user = authService.getUser(request);
+		// User must be logged in AND either the patient the file is about OR a doctor
+		if (user == null || 
+			(user.getId() != patientId && user.getRole() == UserRole.PATIENT) || 
+			user.getRole() != UserRole.DOCTOR) {
+			throw new AuthenticationException();
+		} 
 	}
 	
+	@Before(value = "requireDoctorPointcut() && args(..,request)")
+	public void checkDoc(HttpServletRequest request) throws AuthenticationException {
+		User user = authService.getUser(request);
+		// User must be logged in AND a doctor to vie wthis information
+		if (user == null || user.getRole() != UserRole.DOCTOR) {
+			throw new AuthenticationException();
+		} 
+	}
+	
+	
+	
+	
+
 	////////////////////////////////////////////////////////////////////
 	/////// 	Security Concept: Database-stored Session ID	///////
 	//////////////////////////////////////////////////////////////////

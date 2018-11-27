@@ -4,20 +4,72 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.enums.UserRole;
+
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
+//@NamedNativeQuery(
+//	    name = "find_person_name",
+//	    query =
+//	        " IF EXISTS (SELECT users.user_id\r\n" + 
+//	        "	FROM users \r\n" + 
+//	        "	WHERE users.username = input_username\r\n" + 
+//	        "	AND password = crypt(input_password,password)) \r\n" + 
+//	        "THEN \r\n" + 
+//	        "	UPDATE users \r\n" + 
+//	        "		SET session_id = crypt(input_username, gen_salt('bf',6))\r\n" + 
+//	        "		WHERE users.username = input_username;\r\n" + 
+//	        "	RETURN QUERY \r\n" + 
+//	        "		SELECT *" + 
+//	        "		FROM users \r\n" + 
+//	        "		WHERE users.username = input_username;\r\n" + 
+//	        "\r\n" + 
+//	        "END IF;\r\n"
+//	)
+//@NamedStoredProcedureQuery(
+//		name = "login", // name of stored procedure in the persistence unit
+//		procedureName = "login_user", //name of  stored procedure in the database
+//		parameters = //Parameters of the stored procedure
+//		{ 
+//			@StoredProcedureParameter(// A parameter,
+//					name = "username", //Name of the parameter
+//					mode = ParameterMode.IN, // Mode of the parameter
+//					type = String.class),
+//			@StoredProcedureParameter(// A parameter,
+//					name = "password", //Name of the parameter
+//					mode = ParameterMode.IN, // Mode of the parameter
+//					type = String.class)// JDBC Type.		
+//		}
+//)
+//@NamedStoredProcedureQuery(
+//		name = "authenticate", // name of stored procedure in the persistence unit
+//		procedureName = "authenticate_cookie", //name of  stored procedure in the database
+//		parameters = //Parameters of the stored procedure
+//		{ 
+//			@StoredProcedureParameter(// A parameter,
+//					name = "username", //Name of the parameter
+//					mode = ParameterMode.IN, // Mode of the parameter
+//					type = String.class),
+//			@StoredProcedureParameter(// A parameter,
+//					name = "session", //Name of the parameter
+//					mode = ParameterMode.IN, // Mode of the parameter
+//					type = String.class)// JDBC Type.		
+//		}
+//)
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +86,10 @@ public class User {
 	private String lastName;
 	@Column(name = "user_role")
 	private UserRole role;
+	@JsonIgnore
+	@Column(name = "session_id")
+	private String session;
+	
 	
 	public User() {
 		super();
@@ -49,7 +105,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
-				+ ", lastName=" + lastName + "]";
+				+ ", lastName=" + lastName + ", role=" + role + ", session=" + session + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -131,6 +187,11 @@ public class User {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
-	
+	public String getSession() {
+		return session;
+	}
+	public void setSession(String session) {
+		this.session = session;
+	}
 
 }

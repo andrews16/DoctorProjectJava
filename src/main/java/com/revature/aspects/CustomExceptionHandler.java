@@ -5,9 +5,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.BadRequestException;
@@ -31,9 +32,10 @@ public class CustomExceptionHandler {
 ////		
 ////	}
 ////	@AfterThrowing(pointcut = "execution(* com.revature.controllers...* (..))", throwing = "ex")
+	@ResponseStatus(value=HttpStatus.UNAUTHORIZED, reason="Authentication required")
 	@AfterThrowing(pointcut = "execution(* com.revature.controllers..*(..))", throwing = "ex")
 	public void logExceptions(AuthenticationException ex) throws Exception {
-		System.out.println("Exception thrown and advice reached." );
+		// This is where we should have a logger.	
 	}
 	
 	@AfterThrowing(pointcut = "execution(* com.revature.controllers..*(..)) && args(*,request)", throwing = "ex")
@@ -45,13 +47,7 @@ public class CustomExceptionHandler {
 		}
 		System.out.println(request.getPathInfo());
 	}
-//	
-//	@AfterThrowing(pointcut = "execution(* com.revature.controller.* (..))", throwing = "ex")
-//	public void errorInterceptor(AuthenticationException ex, HttpServletRequest request, HttpServletResponse response) {
-//		log.warn("Authentication error!");
-//		System.out.println("ARIVED HERE ASPECT LOGGING " + request.toString());
-//	}
-//	
+
 	 @ExceptionHandler(BadRequestException.class)
 	 public void handleBadRequestException(BadRequestException ex) {
 		 System.out.println("Exception handled by aspect!! ");

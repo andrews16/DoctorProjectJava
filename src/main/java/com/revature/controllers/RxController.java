@@ -43,7 +43,7 @@ public class RxController {
 	 */
 	@RequireDoctorOrPatient
 	@GetMapping("{patientId}")
-	public List<Prescription> getListFor(@PathVariable Integer patientId, HttpServletRequest request) throws BadRequestException {
+	public List<Prescription> getListFor(@PathVariable Integer patientId, HttpServletRequest request) throws Exception {
 		return this.rxService.getList(patientId);
 	}
 	
@@ -84,12 +84,6 @@ public class RxController {
 	public void removeRx(@PathVariable Integer rxId, HttpServletRequest request ) throws BadRequestException {
 		this.rxService.removeRx(rxId);
 	}
-	
-	@ExceptionHandler(BadRequestException.class)
-	@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Bad Request")
-	public void handleBadRequestException(BadRequestException ex) {
-	}
-
 
 }
 
