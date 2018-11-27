@@ -44,25 +44,28 @@ public class VisitRepo {
 	
 	
 	//single visit
-//	@Transactional
-//	public VisitInfo findByIdRepo(int id) {
-//		return sf.getCurrentSession().get(VisitInfo.class, id);
-//	}
-	
 	@Transactional(propagation = Propagation.REQUIRED)
-    public VisitInfo findByIdRepo(int id) {
-    		CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		
-    		CriteriaQuery<VisitInfo> initQuery = cb.createQuery(VisitInfo.class);	
-    		Root<VisitInfo> root = initQuery.from(VisitInfo.class);				
-    		initQuery
-    			.select(root)	
-    			.where(cb.equal(root.get("id"), id)); 
-    		Query<VisitInfo> query = sf.getCurrentSession().createQuery(initQuery);
-    		List<VisitInfo> results = query.getResultList();
-    		
-    		return results.get(0);
-    	
-    	}
+	public VisitInfo findByIdRepo(Integer id) {
+		System.out.println("VisitRepo Get");
+	//	return null;
+VisitInfo visitInfo = sf.getCurrentSession().get(VisitInfo.class, id);
+return visitInfo;
+	}
+ //   return sf.getCurrentSession().get(Patient.class, pat.getId());
+
+//	@Transactional(propagation = Propagation.REQUIRED)
+//    public VisitInfo findByIdRepo(int id) {
+//    		CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		
+//    		CriteriaQuery<VisitInfo> initQuery = cb.createQuery(VisitInfo.class);	
+//    		Root<VisitInfo> root = initQuery.from(VisitInfo.class);				
+//    		initQuery
+//    			.select(root)	
+//    			.where(cb.equal(root.get("id"), id)); 
+//    		Query<VisitInfo> query = sf.getCurrentSession().createQuery(initQuery);
+//    		List<VisitInfo> results = query.getResultList();
+//    		return results.get(0);
+//    	
+//    	}
 	
 //	public VisitInfo getVisit(int id) {
 //			Session session = sf.getCurrentSession();

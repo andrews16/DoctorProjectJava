@@ -29,9 +29,9 @@ public class VisitService {
 	}
 	
 	// gets single visit
-	@Transactional
 	public VisitInfo findById(int id) {
 //	VisitInfo vi = visitRepo.getVisit(id);
+		System.out.println("this in VisitService service");
 		return visitRepo.findByIdRepo(id);
 	}
 	

@@ -34,16 +34,16 @@ public class VisitController {
 		this.visitService = visitService;
 	}
 	
-	@PostMapping("")
-	@ResponseStatus(HttpStatus.CREATED)
-	public VisitInfo createVisitInfo(@RequestBody VisitInfo vi) {
-		return this.visitService.create(vi);
-	}
-	
-	@PostMapping("list")
-	public List<VisitInfo> getListFor(@RequestBody Patient patient) {
-		return this.visitService.getList(patient);
-	}
+//	@PostMapping("")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public VisitInfo createVisitInfo(@RequestBody VisitInfo vi) {
+//		return this.visitService.create(vi);
+//	}
+//	
+//	@PostMapping("list")
+//	public List<VisitInfo> getListFor(@RequestBody Patient patient) {
+//		return this.visitService.getList(patient);
+//	}
 	
 	// add a single visit
 	@PostMapping("add")
@@ -52,21 +52,23 @@ public class VisitController {
 		return this.visitService.addVisitInfo(vi);
 	}
 	
-	@PostMapping("my-test")
+	@GetMapping("my-test")
 	public String testpost() {
 		return "peanuts";
 	}
 	
-	@GetMapping("list")
-	public List<VisitInfo> getListForPatient(@RequestBody Patient patient) {
-		System.out.println(" get mapped ");
-		return this.visitService.getList(patient);
-	}
-	
+//	@GetMapping("list")
+//	public List<VisitInfo> getListForPatient(@RequestBody Patient patient) {
+//		System.out.println(" get mapped ");
+//		return this.visitService.getList(patient);
+//	}
+//	
 	// get single visit
-	@GetMapping("/{id}")
+	@GetMapping("{id}")
 	public VisitInfo getVisit(@PathVariable int id){
-		return this.visitService.findById(id);
+		System.out.println("this is the visit contorller");
+		//return new VisitInfo();
+		return visitService.findById(id);
 	}
 
 
