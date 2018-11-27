@@ -22,7 +22,7 @@ import com.revature.services.VisitService;
 
 @RestController
 @RequestMapping("visit")
-@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins="http://localhost:4200/", allowCredentials = "true")
 public class VisitController {
 	
 	VisitService visitService;
@@ -64,10 +64,13 @@ public class VisitController {
 	}
 	
 	// get single visit
+<<<<<<< HEAD
 //	@RequireDoctorOrPatient
+=======
+>>>>>>> 9ac8e9bfb3607f3715bca2b0090aaa80ed0fc7bd
 	@GetMapping("{id}")
-	public VisitInfo getVisit(@PathVariable int id) throws BadRequestException {
-		return visitService.getVisit(id);
+	public VisitInfo getVisit(@PathVariable int id){
+		return visitService.findById(id);
 	}
 
 

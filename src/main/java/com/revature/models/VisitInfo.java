@@ -25,7 +25,7 @@ public class VisitInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "visit_id")
-	private int vistId;
+	private int visitId;
 	
 	@JsonIgnore
 	@Access(AccessType.PROPERTY)
@@ -91,7 +91,7 @@ public class VisitInfo {
 	public VisitInfo(int vistId, Patient patient, Doctor doctor, Date date, String bloodpressure, int weight,
 			String doctor_description, String patient_note) {
 		super();
-		this.vistId = vistId;
+		this.visitId = vistId;
 		this.patient = patient;
 		this.doctor = doctor;
 		this.date = date;
@@ -102,15 +102,15 @@ public class VisitInfo {
 	}
 	@Override
 	public String toString() {
-		return "VisitInfo [vistId=" + vistId + ", patient=" + patient + ", doctor=" + doctor + ", date=" + date
+		return "VisitInfo [vistId=" + visitId + ", patient=" + patient + ", doctor=" + doctor + ", date=" + date
 				+ ", bloodpressure=" + bloodpressure + ", weight=" + weight + ", doctor_description="
 				+ doctorDescription + ", patient_note=" + patientNote + "]";
 	}
-	public int getVistId() {
-		return vistId;
+	public int getVisitId() {
+		return visitId;
 	}
-	public void setVistId(int vistId) {
-		this.vistId = vistId;
+	public void setVisitId(int vistId) {
+		this.visitId = vistId;
 	}
 	public Patient getPatient() {
 		return patient;
