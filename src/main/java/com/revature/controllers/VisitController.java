@@ -22,7 +22,7 @@ import com.revature.services.VisitService;
 
 @RestController
 @RequestMapping("visit")
-@CrossOrigin(origins="http://localhost:4200/", allowCredentials = "true")
+@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true")
 public class VisitController {
 	
 	VisitService visitService;
@@ -65,7 +65,7 @@ public class VisitController {
 //	
 	// get single visit
 	@GetMapping("{id}")
-	public VisitInfo getVisit(@PathVariable int id){
+	public VisitInfo getVisit(@PathVariable int id, HttpServletRequest request){
 		System.out.println("this is the visit contorller");
 		//return new VisitInfo();
 		return visitService.findById(id);
