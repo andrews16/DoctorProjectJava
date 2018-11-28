@@ -48,11 +48,14 @@ public class SecurityAspect {
 	public void checkDocOrPat(Integer patientId, HttpServletRequest request) throws AuthenticationException {
 		User user = authService.getUser(request);
 		// User must be logged in AND either the patient the file is about OR a doctor
-		if (user == null || 
-			(user.getId() != patientId && user.getRole() == UserRole.PATIENT) || 
-			user.getRole() != UserRole.DOCTOR) {
-			throw new AuthenticationException();
-		} 
+		System.out.println(user != null);
+		System.out.println(user.getId() == patientId || user.getRole() == UserRole.DOCTOR);
+		if (user != null && (user.getId() == patientId || user.getRole() == UserRole.DOCTOR) ) {
+			// Do nothing.
+		} else {
+			throw new AuthenticationException();			 
+		}
+		 
 	}
 	
 	@Before(value = "requireDoctorPointcut() && args(..,request)")

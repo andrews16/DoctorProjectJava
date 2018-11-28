@@ -18,8 +18,8 @@ import com.revature.models.User;
 import com.revature.services.AuthenticationService;
 
 @RestController
-@RequestMapping("auth")
-@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true") //allowedHeaders = "*"
+@RequestMapping("")
+@CrossOrigin(origins="http://localhost:4200", allowCredentials = "true", allowedHeaders = "*")
 public class AuthenticationController {
 //	
 	AuthenticationService authService;
