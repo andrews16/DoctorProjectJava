@@ -34,11 +34,11 @@ public class UserController {
 	public List<Patient> searchPatient(@RequestParam(required = false) Integer id, @RequestParam(required = false) String lastName, @RequestParam(required = false) String birthday) throws BadRequestException {
 			return this.userService.getPatient(id, lastName, birthday);			
 	}
-	
-	@GetMapping("{username}")
-	public User searchPatient(String username) throws BadRequestException {
-			return this.userService.getUser(username);			
-	}
+
+//	@GetMapping("{username}")
+//	public User searchPatient(String username) throws BadRequestException {
+//			return this.userService.getUser(username);			
+//	}
 	
 	
 }

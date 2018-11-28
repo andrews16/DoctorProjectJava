@@ -42,15 +42,15 @@ public class AuthenticationService {
 	 */
 	public User getUser(HttpServletRequest request) {
 		Cookie cookie = WebUtils.getCookie(request, "doc-app");
-		if (cookie == null) {
+		// If the user either is not logged in OR is logged out (has cookie overridden with "")
+		// then return null
+		if (cookie == null || cookie.getValue() == "") {
 			return null;
 		}
 		// Special string is used so that the hash has virtually 0 chance of having it occur.
 		String[] strings = cookie.getValue().split("num.!PC4!.sess");
 		// The first string is the username, the second is the DB session.
-		System.out.println(strings[0] + "      " + strings[1]);
-		return authRepo.authenticate(strings[0], strings[1]);
-		
+		return authRepo.authenticate(strings[0], strings[1]);		
 	}
 
 }
