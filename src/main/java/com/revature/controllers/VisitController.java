@@ -3,6 +3,8 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.annotations.RequireDoctorOrPatient;
-import com.revature.exceptions.BadRequestException;
 import com.revature.models.Patient;
 import com.revature.models.VisitInfo;
 import com.revature.services.VisitService;
@@ -34,40 +34,41 @@ public class VisitController {
 		this.visitService = visitService;
 	}
 	
-	@PostMapping("")
-	@ResponseStatus(HttpStatus.CREATED)
-	public VisitInfo createVisitInfo(@RequestBody VisitInfo vi) {
-		return this.visitService.create(vi);
-	}
-	
-	@PostMapping("list")
-	public List<VisitInfo> getListFor(@RequestBody Patient patient) {
-		return this.visitService.getList(patient);
-	}
+//	@PostMapping("")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public VisitInfo createVisitInfo(@RequestBody VisitInfo vi) {
+//		return this.visitService.create(vi);
+//	}
+//	
+//	@PostMapping("list")
+//	public List<VisitInfo> getListFor(@RequestBody Patient patient) {
+//		return this.visitService.getList(patient);
+//	}
 	
 	// add a single visit
 	@PostMapping("add")
-	public VisitInfo addVisitInfo(@RequestBody VisitInfo vi) {
+	public VisitInfo addVisitInfo(@RequestBody VisitInfo vi, HttpServletRequest request) {
 		System.out.println(" Visit Info " + vi);
 		return this.visitService.addVisitInfo(vi);
 	}
 	
-	@PostMapping("my-test")
+	@GetMapping("my-test")
 	public String testpost() {
 		return "peanuts";
 	}
 	
-	@GetMapping("list")
-	public List<VisitInfo> getListForPatient(@RequestBody Patient patient) {
-		System.out.println(" get mapped ");
-		return this.visitService.getList(patient);
-	}
-	
+//	@GetMapping("list")
+//	public List<VisitInfo> getListForPatient(@RequestBody Patient patient) {
+//		System.out.println(" get mapped ");
+//		return this.visitService.getList(patient);
+//	}
+//	
 	// get single visit
-	@RequireDoctorOrPatient
 	@GetMapping("{id}")
-	public VisitInfo getVisit(@PathVariable int id) throws BadRequestException {
-		return visitService.getVisit(id);
+	public VisitInfo getVisit(@PathVariable int id, HttpServletRequest request){
+		System.out.println("this is the visit contorller");
+		//return new VisitInfo();
+		return visitService.findById(id);
 	}
 
 

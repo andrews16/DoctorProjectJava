@@ -2,8 +2,13 @@ package com.revature.repos;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -11,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.models.Doctor;
 import com.revature.models.Patient;
+import com.revature.models.User;
 import com.revature.models.VisitInfo;
 
 @Repository
@@ -39,13 +45,35 @@ public class VisitRepo {
 	
 	//single visit
 	@Transactional(propagation = Propagation.REQUIRED)
-	public VisitInfo getVisit(int id) {
-			Session session = sf.getCurrentSession();
-			VisitInfo vi = session.createNativeQuery("SELECT * FROM visit_info WHERE visit_id = :visid", VisitInfo.class)
-					.setParameter("visid", id)
-					.getSingleResult();
-		return vi;
+	public VisitInfo findByIdRepo(Integer id) {
+		System.out.println("VisitRepo Get");
+	//	return null;
+VisitInfo visitInfo = sf.getCurrentSession().get(VisitInfo.class, id);
+return visitInfo;
 	}
+ //   return sf.getCurrentSession().get(Patient.class, pat.getId());
+
+//	@Transactional(propagation = Propagation.REQUIRED)
+//    public VisitInfo findByIdRepo(int id) {
+//    		CriteriaBuilder cb = sf.getCurrentSession().getCriteriaBuilder(); 		
+//    		CriteriaQuery<VisitInfo> initQuery = cb.createQuery(VisitInfo.class);	
+//    		Root<VisitInfo> root = initQuery.from(VisitInfo.class);				
+//    		initQuery
+//    			.select(root)	
+//    			.where(cb.equal(root.get("id"), id)); 
+//    		Query<VisitInfo> query = sf.getCurrentSession().createQuery(initQuery);
+//    		List<VisitInfo> results = query.getResultList();
+//    		return results.get(0);
+//    	
+//    	}
+	
+//	public VisitInfo getVisit(int id) {
+//			Session session = sf.getCurrentSession();
+//			VisitInfo vi = session.createNativeQuery("SELECT * FROM visit_info WHERE visit_id = :visid", VisitInfo.class)
+//					.setParameter("visid", id)
+//					.getSingleResult();
+//		return vi;
+//	}
 
 	@Transactional
 	public VisitInfo addVisitInfo(VisitInfo vi) {
